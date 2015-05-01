@@ -36,9 +36,17 @@ Node* initList(int* array, int size)
 
 Node* merge(Node* head1, Node* head2)
 {
-    if (head1 == NULL || head2 == NULL || head1->next == NULL || head2->next == NULL)
+    if ((head1 == NULL && head2 == NULL) || (head1->next == NULL && head2->next == NULL))
     {
         return NULL;
+    }
+    if (head1 && head2 == NULL)
+    {
+        return head1;
+    }
+    if (head2 && head1 == NULL)
+    {
+        return head2;
     }
     Node* head = head1->next->value < head2->next->value ? head1 : head2;
     Node* p1 = head1->next;

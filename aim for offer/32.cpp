@@ -67,7 +67,6 @@ int getNumberOfOneStr(char* str)
     return sum_first_digit + sum_other_digit + getNumberOfOneStr(str + 1);
 }
 
-
 // http://zhedahht.blog.163.com/blog/static/25411174200732494452636/
 int getNumberOfOneEfficient(int n)
 {

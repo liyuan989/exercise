@@ -64,7 +64,7 @@ void reverseSentence(char* str, int size)
 结果cdefgab。
 */
 
-void leftRotate(char* str, int n)
+void leftRotateString(char* str, int n)
 {
     if (str == NULL || *str == '\0' || n <= 0)
     {
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
     printf("%s\n", str1);
 
     char str2[] = "abcdefg";
-    leftRotate(str2, 2);
+    leftRotateString(str2, 2);
     printf("%s\n", str2);
     return 0;
 }

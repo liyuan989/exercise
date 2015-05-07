@@ -61,7 +61,7 @@ int sumOfSequence(int a, int b)
 
 void printSequence(int sum)
 {
-    if (sum <= 1)
+    if (sum < 3)
     {
         return;
     }

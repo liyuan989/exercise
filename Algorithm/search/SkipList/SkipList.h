@@ -214,21 +214,21 @@ public:
         srand(seed);
     }
 
-    void insert(iterator pos)
+    bool insert(iterator pos)
     {
-        insert(*pos);
+        return insert(*pos);
     }
 
-    void insert(const value_type& val)
+    bool insert(const value_type& val)
     {
         size_type k = makeLevel();
         if (k <= level_)
         {
-            insertNormal(k, val);
+            return insertNormal(k, val);
         }
         else
         {
-            insertGreaterLevel(k, val);
+            return insertGreaterLevel(k, val);
         }
     }
 
@@ -263,20 +263,49 @@ public:
         return iterator(end());
     }
 
-    void erase(value_type val)
+    bool erase(iterator pos)
     {
-        for (Node* head = head_; head; head = head->below)
+        return erase(*pos);
+    }
+
+    bool erase(const value_type& val)
+    {
+        Node* p = head_;
+        Node* current = p->next;
+        bool erased = false;
+        while (p)
         {
-            for (Node* p = head; p->next; p = p->next)
+            while (current->next && compare_(current->value, val))
             {
-                if (p->next->value == val)
+                p = current;
+                current = current->next;
+            }
+            if (current->next == NULL || compare_(val, current->value))
+            {
+                p = p->below;
+                if (p)
                 {
-                    Node* tmp = p->next;
-                    p->next = tmp->next;
-                    delete tmp;
+                    current = p->next;
                 }
             }
+            else
+            {
+                p->next = current->next;
+                delete current;
+                p = p->below;
+                if (p)
+                {
+                    current = p->next;
+                }
+                erased = true;
+            }
         }
+        if (erased)
+        {
+            --size_;
+            return true;
+        }
+        return false;
     }
 
     // for debug
@@ -303,7 +332,7 @@ private:
         return k < kMaxLevel ? k : kMaxLevel;
     }
 
-    void insertNormal(value_type k, const value_type& val)
+    bool insertNormal(value_type k, const value_type& val)
     {
         value_type step = level_ - k;
         Node* head = head_;
@@ -342,16 +371,18 @@ private:
             }
             else
             {
-                return;
+                return false;
             }
         }
         if (insert_once)
         {
             ++size_;
+            return true;
         }
+        return false;
     }
 
-    void insertGreaterLevel(value_type k, const value_type& val)
+    bool insertGreaterLevel(value_type k, const value_type& val)
     {
         value_type step = k - level_;
         level_ = k;
@@ -393,13 +424,15 @@ private:
             }
             else
             {
-                return;
+                return false;;
             }
         }
         if (insert_once)
         {
             ++size_;
+            return false;
         }
+        return false;
     }
 
     Node*      head_;
